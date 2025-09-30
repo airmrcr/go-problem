@@ -1,4 +1,4 @@
-// Copyright (C) 2024 neocotic
+// Copyright (C) 2025 neocotic
 // Copyright (c) 2023 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,9 +25,10 @@
 package stack
 
 import (
-	"github.com/neocotic/go-problem/internal/buffer"
 	"runtime"
 	"sync"
+
+	"github.com/neocotic/go-problem/internal/buffer"
 )
 
 // Stack is a captured stack trace.

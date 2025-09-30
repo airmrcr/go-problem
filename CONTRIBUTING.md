@@ -18,10 +18,9 @@ $ make format
 $ make test
 ```
 
-You must have at least [Golang](https://go.dev) version 1.21 or newer installed.
+You must have at least [Golang](https://go.dev) version 1.24 or newer installed.
 
 All pull requests should be made to the `main` branch.
 
-Don't forget to add your details to the list of
-[AUTHORS.md](https://github.com/neocotic/go-problem/blob/main/AUTHORS.md) if you want your contribution to be recognized
-by others.
+Remember to add your details to the list of [AUTHORS.md](https://github.com/neocotic/go-problem/blob/main/AUTHORS.md) if
+you want your contribution to be recognized by others.

@@ -1,0 +1,12 @@
+## Version 0.2.0, 2025.09.30
+
+* Bump support for Go to 1.24+
+* Change all functions that return `Builder` to return `*Builder` pointer instead
+* Add built-in support for [zap](https://github.com/uber-go/zap) logging
+* Fix issue causing `Translator` to be ignored when specified
+* Improve documentation
+* Bump all dependencies to latest versions
+
+## Version 0.1.0, 2024.05.13
+
+* Initial release

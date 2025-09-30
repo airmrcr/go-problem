@@ -1,4 +1,4 @@
-// Copyright (C) 2024 neocotic
+// Copyright (C) 2025 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,13 +34,6 @@ type (
 
 	// Operator is used by a Matcher to compare two values of the same type.
 	Operator uint8
-
-	// Unwrapper is a function used by Builder.Wrap and Wrap to handle an already wrapped Problem in err's tree.
-	//
-	// An Unwrapper is effectively responsible for deciding what, if any, information from a wrapped Problem is to be
-	// used to construct the new Problem. Any such information will not take precedence over any explicitly defined
-	// Problem fields, however, it will take precedence over any information derived from a Definition or its Type.
-	Unwrapper func(err error) Problem
 )
 
 const (
@@ -256,6 +249,17 @@ func HasExtension(key string) Matcher {
 	}
 }
 
+// HasExtensionWithValue is used to match a Problem based on whether it contains an extension with the given key with a
+// value matching the function provided.
+func HasExtensionWithValue(key string, valueMatcher func(value any) bool) Matcher {
+	return func(p *Problem) bool {
+		if value, found := p.Extension(key); found {
+			return valueMatcher(value)
+		}
+		return false
+	}
+}
+
 // HasExtensions is used to match a Problem based on whether it contains extensions with the given keys.
 func HasExtensions(keys ...string) Matcher {
 	return func(p *Problem) bool {
@@ -356,28 +360,6 @@ func Or(matchers ...Matcher) Matcher {
 	}
 }
 
-// FullUnwrapper returns an Unwrapper that extracts all fields from a wrapped Problem in err's tree, if present. These
-// fields will not take precedence over any explicitly defined Problem fields, however, it will take precedence over any
-// fields derived from a Definition or its Type.
-func FullUnwrapper() Unwrapper {
-	return unwrapAllFields
-}
-
-// NoopUnwrapper returns an Unwrapper that does nothing.
-func NoopUnwrapper() Unwrapper {
-	return func(_ error) Problem {
-		return Problem{}
-	}
-}
-
-// PropagatedFieldUnwrapper returns an Unwrapper that extracts only fields that are expected to be propagated (e.g.
-// captured stack trace, generated "UUID") from a wrapped Problem in err's tree, if present. Any such fields will not
-// take precedence over any explicitly defined Problem fields, however, it will take precedence over any fields derived
-// from a Definition or its Type.
-func PropagatedFieldUnwrapper() Unwrapper {
-	return unwrapPropagatedFields
-}
-
 // operate returns the result of the given operation.
 //
 // Panics if op is invalid.
@@ -408,29 +390,4 @@ func operatorOrDefault(op []Operator) Operator {
 		return op[0]
 	}
 	return OperatorEquals
-}
-
-// unwrapAllFields extracts all fields from a wrapped Problem in err's tree, if present. These fields will not take
-// precedence over any explicitly defined Problem fields, however, it will take precedence over any fields derived from
-// a Definition or its Type.
-func unwrapAllFields(err error) Problem {
-	if p, isProblem := As(err); isProblem && p != nil {
-		return *p
-	}
-	return Problem{}
-}
-
-// unwrapPropagatedFields extracts only fields that are expected to be propagated (e.g. captured stack trace, generated
-// "UUID") from a wrapped Problem in err's tree, if present. Any such fields will not take precedence over any
-// explicitly defined Problem fields, however, it will take precedence over any fields derived from a Definition or its
-// Type.
-func unwrapPropagatedFields(err error) Problem {
-	if p, isProblem := As(err); isProblem && p != nil {
-		return Problem{
-			Stack:   p.Stack,
-			UUID:    p.UUID,
-			logInfo: p.logInfo,
-		}
-	}
-	return Problem{}
 }

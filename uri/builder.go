@@ -1,4 +1,4 @@
-// Copyright (C) 2024 neocotic
+// Copyright (C) 2025 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,8 @@
 
 // Package uri provides support for constructing URI references to be used within problems.
 package uri
+
+// TODO: Consider moving "uri" etc out to separate library as not part of RFC
 
 import (
 	"fmt"

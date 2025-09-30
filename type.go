@@ -1,4 +1,4 @@
-// Copyright (C) 2024 neocotic
+// Copyright (C) 2025 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -85,7 +85,7 @@ const (
 	// ContentTypeJSONUTF8 is the recommended content/media type to represent a problem in JSON format with UTF-8
 	// encoding.
 	ContentTypeJSONUTF8 = ContentTypeJSON + "; charset=utf-8"
-	// ContentTypeXML is the recommended content/media type to represent a Problem in XML format.
+	// ContentTypeXML is the recommended content/media type to represent a problem in XML format.
 	ContentTypeXML = "application/problem+xml"
 	// ContentTypeXMLUTF8 is the recommended content/media type to represent a problem in XML format with UTF-8
 	// encoding.

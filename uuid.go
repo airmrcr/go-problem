@@ -1,4 +1,4 @@
-// Copyright (C) 2024 neocotic
+// Copyright (C) 2025 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,6 +19,8 @@
 // SOFTWARE.
 
 package problem
+
+// TODO: Consider moving "uuid" etc out to separate library and recommend use via extension as not part of RFC (likely needs "plugin" support)
 
 import (
 	"context"

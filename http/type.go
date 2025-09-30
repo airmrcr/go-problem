@@ -1,4 +1,4 @@
-// Copyright (C) 2024 neocotic
+// Copyright (C) 2025 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -343,7 +343,7 @@ var (
 	// UnsupportedMediaType is a built-in reusable problem.Type that may be used to represent an HTTP Unsupported Media
 	// Type error.
 	UnsupportedMediaType = problem.Type{
-		LogLevel: problem.LogLevelWarn,
+		LogLevel: problem.LogLevelDebug,
 		Status:   http.StatusUnsupportedMediaType,
 		Title:    http.StatusText(http.StatusUnsupportedMediaType),
 		TitleKey: "problem.http.UnsupportedMediaType.title",

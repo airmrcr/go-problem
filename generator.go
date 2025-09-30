@@ -1,4 +1,4 @@
-// Copyright (C) 2024 neocotic
+// Copyright (C) 2025 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -85,7 +85,7 @@ type Generator struct {
 	//		switch {
 	//		case defType.Status == 0:
 	//			return defType.LogLevel
-	//		case def.Type.Status > 500:
+	//		case defType.Status > 500:
 	//			return LogLevelError
 	//		default:
 	//			return LogLevelWarn
@@ -106,9 +106,9 @@ type Generator struct {
 	// StackFlag provides control over the capturing of a stack trace and its visibility on a Problem.
 	//
 	// StackFlag is the default Flag. If Builder.Stack or WithStack are used, but no flags are provided, this is
-	// considered equal to passing FlagField and FlagLog. This would mean that the UUID will be generated and the fully
-	// visible on the Problem both in terms of field and within the logs. If FlagDisable is ever passed, all other flags
-	// are ignored and the stack trace is not captured (or inherited) and will not be visible on the Problem.
+	// considered equal to passing FlagField and FlagLog. This would mean that the stack trace will be generated and the
+	// fully visible on the Problem both in terms of field and within the logs. If FlagDisable is ever passed, all other
+	// flags are ignored and the stack trace is not captured (or inherited) and will not be visible on the Problem.
 	//
 	// For example;
 	//
@@ -165,8 +165,7 @@ type Generator struct {
 	//
 	//	g := &Generator{Unwrapper: FullUnwrapper()}
 	Unwrapper Unwrapper
-	// UUIDFlag provides control over the generation of an Universally Unique Identifier and its visibility on a
-	// Problem.
+	// UUIDFlag provides control over the generation of a Universally Unique Identifier and its visibility on a Problem.
 	//
 	// UUIDFlag is the default Flag. If Builder.UUID or WithUUID are used, but no flags are provided, this is considered
 	// equal to passing FlagField and FlagLog. This would mean that the UUID will be generated and the fully visible on
