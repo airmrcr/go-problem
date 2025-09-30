@@ -10,7 +10,7 @@ Problem Details for HTTP APIs.
 
 ## Installation
 
-Install using [go install](https://go.dev/ref/mod#go-install):
+Install using [go get](https://go.dev/ref/mod#go-get):
 
 ``` sh
 go get github.com/neocotic/go-problem

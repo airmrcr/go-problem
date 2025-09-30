@@ -1,3 +1,7 @@
+## Version 0.2.1, 2025.09.30
+
+* Fix link to `go get` command in `README.md`
+
 ## Version 0.2.0, 2025.09.30
 
 * Bump support for Go to 1.24+
