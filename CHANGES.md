@@ -1,3 +1,7 @@
+## Version 0.3.1, 2025.10.09
+
+* Add `LICENSE.md` file for `github.com/neocotic/go-problem/zap` module
+
 ## Version 0.3.0, 2025.10.09
 
 * **Breaking Change:** Remove built-in support for [zap](https://github.com/uber-go/zap) logging
