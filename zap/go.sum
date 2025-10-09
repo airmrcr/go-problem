@@ -10,6 +10,8 @@ github.com/neocotic/go-problem v0.2.1 h1:lfu2xpWu7GIkSbFVA2/qf+uGDh29Xhcxunyjp5c
 github.com/neocotic/go-problem v0.2.1/go.mod h1:tDM4XKF5w/slrN1YkjQRT7srE6pY1W+WbbsoMoSBD8s=
 github.com/neocotic/go-problem v0.3.0 h1:h9PhsnkjwXUzUBIkHnQA/ZwYwvW0Jn8jD06F2xnr2Hs=
 github.com/neocotic/go-problem v0.3.0/go.mod h1:oFEkJMCE3DmpY6+JZ0RFWNA4urXJucYT7XzTi+NPAVw=
+github.com/neocotic/go-problem v0.3.1 h1:/8ZeI7nVp7AfYBCYXI3MbZHy7x8eFDz8VZ57sK2ejk4=
+github.com/neocotic/go-problem v0.3.1/go.mod h1:oFEkJMCE3DmpY6+JZ0RFWNA4urXJucYT7XzTi+NPAVw=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=

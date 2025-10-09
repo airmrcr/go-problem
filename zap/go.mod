@@ -3,7 +3,7 @@ module github.com/neocotic/go-problem/zap
 go 1.24
 
 require (
-	github.com/neocotic/go-problem v0.3.0
+	github.com/neocotic/go-problem v0.3.1
 	go.uber.org/zap v1.27.0
 )
 
