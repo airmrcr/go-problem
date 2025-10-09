@@ -19,23 +19,23 @@ jobs:
 
     strategy:
       matrix:
-        go-version:
+        go:
           - '1.24.x'
           - '1.25.x'
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: Install Go ${{ matrix.go-version }}
-        uses: actions/setup-go@v4
+        uses: actions/checkout@v5
+      - name: Install Go ${{ matrix.go }}
+        uses: actions/setup-go@v6
         with:
-          go-version: ${{ matrix.go-version }}
-          cache: true
-      - name: Install dependencies
-        run: go get ./...
+          go-version: ${{ matrix.go }}
+          cache-dependency-path: '**/go.sum'
+      - name: Download dependencies
+        run: make download
       - name: Build
-        run: go build -v ./...
+        run: make build
       - name: Test
-        run: go test -v
+        run: make test
       - name: Benchmark
-        run: go test -run=XXX -bench=. ./...
+        run: make bench

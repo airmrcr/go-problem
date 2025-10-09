@@ -1,22 +1,24 @@
+MODULE_DIRS = . ./zap
+
 all: download tidy format build test bench
 
 download:
-	go mod download
+	@$(foreach dir,$(MODULE_DIRS),(cd $(dir) && go mod download) &&) true
 
 tidy:
-	go mod tidy -v
+	@$(foreach dir,$(MODULE_DIRS),(cd $(dir) && go mod tidy) &&) true
 
 format:
-	go fmt
+	@$(foreach dir,$(MODULE_DIRS),(cd $(dir) && go fmt) &&) true
 
 build:
-	go build -v ./...
+	@$(foreach dir,$(MODULE_DIRS),(cd $(dir) && go build -v ./...) &&) true
 
 test:
-	go test -v ./...
+	@$(foreach dir,$(MODULE_DIRS),(cd $(dir) && go test -race -v ./...) &&) true
 
 bench:
-	go test -run=XXX -bench=. ./...
+	@$(foreach dir,$(MODULE_DIRS),(cd $(dir) && go test -run=XXX -bench=. -v ./...) &&) true
 
 update:
-	go get -u all
+	@$(foreach dir,$(MODULE_DIRS),(cd $(dir) && go get -u all) &&) true

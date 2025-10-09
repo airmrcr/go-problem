@@ -1,3 +1,8 @@
+## Version 0.3.0, 2025.10.09
+
+* **Breaking Change:** Remove built-in support for [zap](https://github.com/uber-go/zap) logging
+* Add `github.com/neocotic/go-problem/zap` module to provide support for [zap](https://github.com/uber-go/zap) logging
+
 ## Version 0.2.1, 2025.09.30
 
 * Fix link to `go get` command in `README.md`

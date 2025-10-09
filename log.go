@@ -22,8 +22,6 @@ package problem
 
 import (
 	"context"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
 	"log/slog"
 )
 
@@ -31,16 +29,16 @@ type (
 	// LogInfo contains information associated with a Problem that is only relevant for logging purposes.
 	LogInfo struct {
 		// Level is the LogLevel that has either been explicitly defined during construction or inherited from a Type or
-		// another Problem within an err's tree if unwrapped accordingly.
+		// another Problem within an error's tree if unwrapped accordingly.
 		Level LogLevel
 		// Stack is a string representation of the stack trace captured during construction or inherited from another
-		// Problem within an err's tree if unwrapped accordingly.
+		// Problem within an error's tree if unwrapped accordingly.
 		//
 		// Stack is only populated if Generator.StackFlag has FlagLog or either Builder.Stack or WithStack were used and
 		// either passed no flags or FlagLog explicitly.
 		Stack string
 		// UUID is the Universally Unique Identifier generated during construction or inherited from another Problem
-		// within an err's tree if unwrapped accordingly.
+		// within an error's tree if unwrapped accordingly.
 		//
 		// UUID is only populated if Generator.UUIDFlag has FlagLog or either Builder.UUID or WithUUID were used and
 		// either passed no flags or FlagLog explicitly.
@@ -63,18 +61,13 @@ type (
 
 const (
 	// DefaultLogArgKey is the default argument key passed to Logger immediately before the Problem at the end of the
-	// arguments, and is used by DefaultGenerator.
+	// arguments and is used by DefaultGenerator.
 	DefaultLogArgKey = "problem"
 
 	// DefaultLogLevel is the LogLevel used when one could not be derived.
 	DefaultLogLevel = LogLevelError
 	// defaultSlogLevel is the slog.Level used when one could not be derived.
 	defaultSlogLevel = slog.LevelError
-	// defaultZapLevel is the zapcore.Level used when one could not be derived.
-	defaultZapLevel = zapcore.ErrorLevel
-
-	// badZapKey is used when a zap.Logger is passed an unexpected arg key.
-	badZapKey = "!BADKEY"
 )
 
 // Log logs the given message and Problem along with any additional arguments and context.Background via
@@ -181,43 +174,6 @@ func (p *Problem) LogValue() slog.Value {
 	return slog.GroupValue(attrs...)
 }
 
-// MarshalLogObject appends non-empty fields of the Problem to enc.
-func (p *Problem) MarshalLogObject(enc zapcore.ObjectEncoder) error {
-	if p.Code != "" {
-		enc.AddString("code", string(p.Code))
-	}
-	if p.Detail != "" {
-		enc.AddString("detail", p.Detail)
-	}
-	if p.err != nil {
-		enc.AddString("error", p.err.Error())
-	}
-	if len(p.Extensions) > 0 {
-		if err := enc.AddReflected("extensions", p.Extensions); err != nil {
-			return err
-		}
-	}
-	if p.Instance != "" {
-		enc.AddString("instance", p.Instance)
-	}
-	if p.logInfo.Stack != "" {
-		enc.AddString("stack", p.logInfo.Stack)
-	}
-	if p.Status != 0 {
-		enc.AddInt("status", p.Status)
-	}
-	if p.Title != "" {
-		enc.AddString("title", p.Title)
-	}
-	if p.Type != "" {
-		enc.AddString("type", p.Type)
-	}
-	if p.logInfo.UUID != "" {
-		enc.AddString("uuid", p.logInfo.UUID)
-	}
-	return nil
-}
-
 // logLevel returns the LogLevel recommend to be used to log the Problem.
 func (p *Problem) logLevel() LogLevel {
 	if p == nil || p.logInfo.Level == 0 {
@@ -239,23 +195,8 @@ func DefaultLogger() Logger {
 // This can be useful for cases where the context is used to further enrich logs.
 func DefaultLoggerContext(handleCtx func(ctx context.Context, logger *slog.Logger) *slog.Logger) Logger {
 	return func(ctx context.Context, level LogLevel, msg string, args ...any) {
-		handleCtx(ctx, slog.Default()).Log(ctx, level.slogLevel(), msg, args...)
+		handleCtx(ctx, slog.Default()).Log(ctx, convertLevel(level), msg, args...)
 	}
-}
-
-// GlobalZapLogger returns a Logger that uses zap.L.
-func GlobalZapLogger() Logger {
-	return ZapLoggerFromContext(zap.L(), func(_ context.Context, logger *zap.Logger) *zap.Logger {
-		return logger
-	})
-}
-
-// GlobalZapLoggerContext returns a Logger that uses zap.L while passing the context to the function provided to return
-// the most appropriate zap.Logger.
-//
-// This can be useful for cases where the context is used to further enrich logs.
-func GlobalZapLoggerContext(handleCtx func(ctx context.Context, logger *zap.Logger) *zap.Logger) Logger {
-	return ZapLoggerFromContext(zap.L(), handleCtx)
 }
 
 // LoggerFrom returns a Logger that uses the given slog.Logger.
@@ -271,7 +212,7 @@ func LoggerFrom(logger *slog.Logger) Logger {
 // This can be useful for cases where the context is used to further enrich logs.
 func LoggerFromContext(logger *slog.Logger, handleCtx func(ctx context.Context, logger *slog.Logger) *slog.Logger) Logger {
 	return func(ctx context.Context, level LogLevel, msg string, args ...any) {
-		handleCtx(ctx, logger).Log(ctx, level.slogLevel(), msg, args...)
+		handleCtx(ctx, logger).Log(ctx, convertLevel(level), msg, args...)
 	}
 }
 
@@ -282,28 +223,11 @@ func NoopLogger() Logger {
 	}
 }
 
-// ZapLoggerFrom returns a Logger that uses the given zap.Logger.
-func ZapLoggerFrom(logger *zap.Logger) Logger {
-	return ZapLoggerFromContext(logger, func(_ context.Context, _ *zap.Logger) *zap.Logger {
-		return logger
-	})
-}
-
-// ZapLoggerFromContext returns a Logger that uses the given zap.Logger while passing the context to the function
-// provided to return the most appropriate zap.Logger.
-//
-// This can be useful for cases where the context is used to further enrich logs.
-func ZapLoggerFromContext(logger *zap.Logger, handleCtx func(ctx context.Context, logger *zap.Logger) *zap.Logger) Logger {
-	return func(ctx context.Context, level LogLevel, msg string, args ...any) {
-		handleCtx(ctx, logger).Log(level.zapLevel(), msg, extractZapFields(args)...)
-	}
-}
-
 // LogLevel represents a log level and will typically need mapped to one understood by any custom Logger.
 //
 // It has built-in support for slog.Level when DefaultLogger or LoggerFrom are used.
 //
-// The zero value is intentionally not mapped in order to represent an undefined value and should be substituted by a
+// The zero value is intentionally not mapped to represent an undefined value and should be substituted by a
 // fallback/default LogLevel.
 type LogLevel uint
 
@@ -318,9 +242,9 @@ const (
 	LogLevelError
 )
 
-// slogLevel returns the slog.Level representation of the LogLevel, where possible, otherwise defaultSlogLevel.
-func (ll LogLevel) slogLevel() slog.Level {
-	switch ll {
+// convertLevel returns the slog.Level representation of the given LogLevel, where possible, otherwise defaultSlogLevel.
+func convertLevel(level LogLevel) slog.Level {
+	switch level {
 	case LogLevelDebug:
 		return slog.LevelDebug
 	case LogLevelInfo:
@@ -332,55 +256,6 @@ func (ll LogLevel) slogLevel() slog.Level {
 	default:
 		return defaultSlogLevel
 	}
-}
-
-// zapLevel returns the zapcore.Level representation of the LogLevel, where possible, otherwise defaultZapLevel.
-func (ll LogLevel) zapLevel() zapcore.Level {
-	switch ll {
-	case LogLevelDebug:
-		return zapcore.DebugLevel
-	case LogLevelInfo:
-		return zapcore.InfoLevel
-	case LogLevelWarn:
-		return zapcore.WarnLevel
-	case LogLevelError:
-		return zapcore.ErrorLevel
-	default:
-		return defaultZapLevel
-	}
-}
-
-// argsToZapField turns a prefix of the non-empty args slice into a zapcore.Field and returns the unconsumed portion of
-// the slice.
-//
-// If args[0] is a zapcore.Field, it returns it.
-// If args[0] is a slog.Attr, it returns it and zapcore.Field contain the slog.Attr key-value pair.
-// If args[0] is a string, it treats the first two elements as a key-value pair.
-// Otherwise, it treats args[0] as a value with a missing key.
-func argsToZapField(args []any) (zapcore.Field, []any) {
-	switch k := args[0].(type) {
-	case string:
-		if len(args) == 1 {
-			return zap.String(badZapKey, k), nil
-		}
-		return zap.Any(k, args[1]), args[2:]
-	case slog.Attr:
-		return zap.Any(k.Key, k.Value.Any()), args[1:]
-	case zap.Field:
-		return k, args[1:]
-	default:
-		return zap.Any(badZapKey, k), args[1:]
-	}
-}
-
-// extractZapFields consumes all args into a slice of zapcore.Field.
-func extractZapFields(args []any) (fields []zapcore.Field) {
-	var f zapcore.Field
-	for len(args) > 0 {
-		f, args = argsToZapField(args)
-		fields = append(fields, f)
-	}
-	return
 }
 
 // mapLogGroup returns a slog.Attr with a slog.GroupValue containing all entries within the given map.

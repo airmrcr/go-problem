@@ -30,7 +30,7 @@ type (
 	// Matcher is a function used to conditionally match on a Problem, returning true only if the match is successful.
 	//
 	// A Matcher is never passed a nil pointer to a Problem.
-	Matcher func(p *Problem) bool
+	Matcher func(prob *Problem) bool
 
 	// Operator is used by a Matcher to compare two values of the same type.
 	Operator uint8

@@ -24,7 +24,7 @@ package problem
 // Type.
 //
 // An Option provides an alternative syntax for constructing problems using an underlying Builder as each Option simply
-// maps to Builder method.
+// maps to a Builder method.
 type Option func(b *Builder)
 
 // FromDefinition customizes a Generator to return a Problem using the given Definition when building a Problem.
