@@ -1,4 +1,4 @@
-// Copyright (C) 2025 neocotic
+// Copyright (C) 2026 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -177,35 +177,54 @@ func IsMatch(err error, matchers ...Matcher) bool {
 	return isMatch
 }
 
-// HasCode is used to match a Problem based on its Code.
+// HasCode is used to match a Problem based on its Code using DefaultGenerator.
 //
 // By default, this match is based on whether the values are equal, however, this can be controlled by passing another
 // Operator.
-func HasCode(code Code, operator ...Operator) Matcher {
+//
+// Panics only in the following cases:
+//   - Generator.CodeSeparator is a non-printable rune
+//   - Generator.ValidateCodeNamespace rejects namespace
+//   - Generator.ValidateCodeValue rejects value
+func HasCode(value uint, namespace CodeNamespace, operator ...Operator) Matcher {
+	return HasCodeUsing(DefaultGenerator, value, namespace, operator...)
+}
+
+// HasCodeUsing is used to match a Problem based on its Code using the given Generator.
+//
+// By default, this match is based on whether the values are equal, however, this can be controlled by passing another
+// Operator.
+//
+// Panics only in the following cases:
+//   - Generator.CodeSeparator is a non-printable rune
+//   - Generator.ValidateCodeNamespace rejects namespace
+//   - Generator.ValidateCodeValue rejects value
+func HasCodeUsing(gen *Generator, value uint, namespace CodeNamespace, operator ...Operator) Matcher {
 	op := operatorOrDefault(operator)
+	code := gen.MustBuildCode(value, namespace)
 	return func(p *Problem) bool {
 		return operate(op, p.Code, code)
 	}
 }
 
-// HasCodeNS is used to match a Problem based on the NS within its Code using DefaultGenerator.
+// HasCodeNamespace is used to match a Problem based on the CodeNamespace within its Code using DefaultGenerator.
 //
 // By default, this match is based on whether the values are equal, however, this can be controlled by passing another
 // Operator.
-func HasCodeNS(ns NS, operator ...Operator) Matcher {
-	return HasCodeNSUsing(DefaultGenerator, ns, operator...)
+func HasCodeNamespace(namespace CodeNamespace, operator ...Operator) Matcher {
+	return HasCodeNamespaceUsing(DefaultGenerator, namespace, operator...)
 }
 
-// HasCodeNSUsing is used to match a Problem based on the NS within its Code using the given Generator.
+// HasCodeNamespaceUsing is used to match a Problem based on the CodeNamespace within its Code using the given
+// Generator.
 //
 // By default, this match is based on whether the values are equal, however, this can be controlled by passing another
 // Operator.
-func HasCodeNSUsing(gen *Generator, ns NS, operator ...Operator) Matcher {
-	c := gen.Coder()
+func HasCodeNamespaceUsing(gen *Generator, namespace CodeNamespace, operator ...Operator) Matcher {
 	op := operatorOrDefault(operator)
 	return func(p *Problem) bool {
-		parsed, err := c.Parse(p.Code)
-		return err != nil && operate(op, parsed.NS, ns)
+		parsed, err := gen.ParseCode(p.Code)
+		return err != nil && operate(op, parsed.Namespace, namespace)
 	}
 }
 
@@ -222,10 +241,9 @@ func HasCodeValue(value uint, operator ...Operator) Matcher {
 // By default, this match is based on whether the values are equal, however, this can be controlled by passing another
 // Operator.
 func HasCodeValueUsing(gen *Generator, value uint, operator ...Operator) Matcher {
-	c := gen.Coder()
 	op := operatorOrDefault(operator)
 	return func(p *Problem) bool {
-		parsed, err := c.Parse(p.Code)
+		parsed, err := gen.ParseCode(p.Code)
 		return err != nil && operate(op, parsed.Value, value)
 	}
 }

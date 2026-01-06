@@ -1,4 +1,4 @@
-// Copyright (C) 2025 neocotic
+// Copyright (C) 2026 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,35 +22,36 @@ package problem
 
 // Generator is responsible for generating a Problem. Its zero value (DefaultGenerator) is usable.
 type Generator struct {
-	// CodeNSValidator is the NSValidator used to perform additional validation on a NS used within a Code constructed
-	// and/or parsed by a Coder.
+	// CodeNamespaceValidator is the CodeNamespaceValidator used to perform additional validation on a CodeNamespace
+	// used within a Code constructed and/or parsed by Generator.
 	//
-	// When nil, a Code may contain any rune except Generator.CodeSeparator within its NS so long as it is not empty.
-	// Even when not nil, the NS of a Code must not contain Generator.CodeSeparator and cannot be empty.
+	// When nil, a Code may contain any rune except Generator.CodeSeparator within its CodeNamespace so long as it is
+	// not empty. Even when not nil, the CodeNamespace of a Code must not contain Generator.CodeSeparator and cannot be
+	// empty.
 	//
 	// For example;
 	//
-	//	g := &Generator{CodeNSValidator: ComposeNSValidator(
-	//		LenNSValidator(1, 4),
-	//		UnicodeNSValidator(unicode.IsUpper, unicode.ToUpper),
+	//	g := &Generator{CodeNamespaceValidator: ComposeCodeNamespaceValidator(
+	//		LenCodeNamespaceValidator(1, 4),
+	//		UnicodeCodeNamespaceValidator(unicode.IsUpper, unicode.ToUpper),
 	//	)}
-	//	c := g.Coder()
-	//	c.Validate("USER-404")   // nil
-	//	c.Validate("USERS-404")  // ErrCode
-	//	c.Validate("user-404")   // ErrCode
-	CodeNSValidator NSValidator
-	// CodeSeparator is the rune used to separate the NS and value within a Code constructed and/or parsed by a Coder.
+	//	g.ValidateCode("USER-404")   // nil
+	//	g.ValidateCode("USER.404")   // ErrCode
+	//	g.ValidateCode("USERS-404")  // ErrCode
+	//	g.ValidateCode("user-404")   // ErrCode
+	CodeNamespaceValidator CodeNamespaceValidator
+	// CodeSeparator is the rune used to separate the CodeNamespace and value within a Code constructed and/or parsed by
+	// Generator.
 	//
-	// If zero or less, DefaultCodeSeparator will be used. Otherwise, it must be a printable rune otherwise a Coder will
-	// always return an ErrCode when attempting to construct and/or parse a Code.
+	// If zero or less, DefaultCodeSeparator will be used. Otherwise, it must be a printable rune otherwise Generator
+	// will always return an ErrCode when attempting to parse a Code or panic with it during its construction.
 	//
 	// For example;
 	//
 	//	g := &Generator{CodeSeparator: '.'}
-	//	c := g.Coder("USER")
-	//	c.MustBuild(404)  // "USER.404"
+	//	g.Build().Code(404, "USER").Problem().Code  // "USER.404"
 	CodeSeparator rune
-	// CodeValueLen is the number of digits to be included in the value of a Code constructed and/or parsed by a Coder.
+	// CodeValueLen is the number of digits to be included in the value of a Code constructed and/or parsed by Generator.
 	//
 	// If zero or less, a Code may contain any number of digits within its value so long as there's at least one.
 	// Otherwise, a value cannot contain more digits than CodeValueLen and any value containing fewer digits will be
@@ -59,8 +60,7 @@ type Generator struct {
 	// For example;
 	//
 	//	g := &Generator{CodeValueLen: 8}
-	//	c := g.Coder("USER")
-	//	c.MustBuild(404)  // "USER.40400000"
+	//	g.Build().Code(404, "USER").Problem().Code  // "USER.40400000"
 	CodeValueLen int
 	// ContentType is the value used to populate the Content-Type header when Generator.WriteError or
 	// Generator.WriteProblem are called without a WriteOptions.ContentType being passed. This also applies to the
@@ -213,9 +213,9 @@ type Generator struct {
 //     unwrapped and treated as defaults for the generated Problem by default (see Generator.Unwrapper for more
 //     information)
 //   - Any translation keys are ignored (see Generator.Translator for more information)
-//   - Any Code constructed and/or parsed can have any non-empty NS and value and are separated by DefaultCodeSeparator
-//     (see Generator.CodeNSValidator, Generator.CodeValueLen, and Generator.CodeSeparator respectively for more
-//     information)
+//   - Any Code constructed and/or parsed can have any non-empty CodeNamespace and value and are separated by
+//     DefaultCodeSeparator (see Generator.CodeNamespaceValidator, Generator.CodeValueLen, and Generator.CodeSeparator
+//     respectively for more information)
 //   - Any message that is logged (e.g. via Generator.Log or Generator.LogContext) is done so using slog.Default with
 //     DefaultLogArgKey passed as the key along with a Problem within the last two arguments (see Generator.Logger and
 //     Generator.LogArgKey respectively for more information)

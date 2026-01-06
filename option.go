@@ -1,4 +1,4 @@
-// Copyright (C) 2025 neocotic
+// Copyright (C) 2026 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -48,12 +48,20 @@ func FromType(defType Type) Option {
 	}
 }
 
-// WithCode customizes a Generator to return a Problem with the given Code. See Problem.Code for more information.
+// WithCode customizes a Generator to return a Problem with the constructed Code. See Problem.Code for more information.
 //
-// If code is not empty, it will take precedence over anything provided using FromDefinition or any of the Wrap options.
-func WithCode(code Code) Option {
+// CodeNamespace is required as it's used during the construction and is separated from value using
+// Generator.CodeSeparator.
+//
+// Panics only in the following cases:
+//   - Generator.CodeSeparator is a non-printable rune
+//   - Generator.ValidateCodeNamespace rejects namespace
+//   - Generator.ValidateCodeValue rejects value
+//
+// If code specified, it will take precedence over anything provided using FromDefinition or any of the Wrap options.
+func WithCode(value uint, namespace CodeNamespace) Option {
 	return func(b *Builder) {
-		b.Code(code)
+		b.Code(value, namespace)
 	}
 }
 

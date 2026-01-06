@@ -1,4 +1,4 @@
-// Copyright (C) 2025 neocotic
+// Copyright (C) 2026 neocotic
 // Copyright (c) 2023 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy

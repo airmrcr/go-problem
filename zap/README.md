@@ -90,6 +90,6 @@ A list of contributors can be found in [AUTHORS.md](https://github.com/neocotic/
 
 ## License
 
-Copyright © 2025 neocotic
+Copyright © 2026 neocotic
 
 See [LICENSE.md](https://github.com/neocotic/go-problem/raw/main/LICENSE.md) for more information on our MIT license.

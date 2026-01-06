@@ -40,6 +40,7 @@ var (
 	}
 	NotFoundDefinition = problem.Definition{
 		Type: NotFound,
+	    Code: problem.MustBuildCode(404, "ACME"),
 	}
 )
 ```
@@ -49,7 +50,14 @@ Create a problem using the builder pattern:
 ``` go
 problem.Build().
 	Definition(NotFoundDefinition).
-	Code(problem.MustBuildCode(404, "USER")).
+	Code(404, "USER").
+	Detail("User not found").
+	Instance("https://api.example.void/users/123").
+	Wrap(err).
+	Problem()
+// OR:
+NotFoundDefinition.Build().
+	Code(404, "USER").
 	Detail("User not found").
 	Instance("https://api.example.void/users/123").
 	Wrap(err).
@@ -61,7 +69,14 @@ Or the option pattern:
 ``` go
 problem.New(
 	problem.FromDefinition(NotFoundDefinition),
-	problem.WithCode(problem.MustBuildCode(404, "USER")),
+	problem.WithCode(404, "USER"),
+	problem.WithDetail("User not found"),
+	problem.WithInstance("https://api.example.void/users/123"),
+	problem.Wrap(err),
+)
+// OR:
+NotFoundDefinition.New(
+	problem.WithCode(404, "USER"),
 	problem.WithDetail("User not found"),
 	problem.WithInstance("https://api.example.void/users/123"),
 	problem.Wrap(err),
@@ -87,6 +102,6 @@ A list of contributors can be found in [AUTHORS.md](https://github.com/neocotic/
 
 ## License
 
-Copyright © 2025 neocotic
+Copyright © 2026 neocotic
 
 See [LICENSE.md](https://github.com/neocotic/go-problem/raw/main/LICENSE.md) for more information on our MIT license.

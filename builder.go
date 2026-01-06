@@ -1,4 +1,4 @@
-// Copyright (C) 2025 neocotic
+// Copyright (C) 2026 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/neocotic/go-optional"
-	"github.com/neocotic/go-problem/internal/stack"
 	"maps"
 	"net/http"
+
+	"github.com/neocotic/go-optional"
+	"github.com/neocotic/go-problem/internal/stack"
 )
 
 // Flag provides control over the generation of specific data and its visibility on their respective fields on a
@@ -139,11 +140,19 @@ func (b *Builder) Clone() *Builder {
 	return &clone
 }
 
-// Code sets the given Code to be used when building a Problem. See Problem.Code for more information.
+// Code constructs the Code to be used when building a Problem. See Problem.Code for more information.
 //
-// If code is not empty, it will take precedence over anything provided using Builder.Definition or Builder.Wrap.
-func (b *Builder) Code(code Code) *Builder {
-	b.code = code
+// CodeNamespace is required as it's used during the construction and is separated from value using
+// Generator.CodeSeparator.
+//
+// Panics only in the following cases:
+//   - Generator.CodeSeparator is a non-printable rune
+//   - Generator.ValidateCodeNamespace rejects namespace
+//   - Generator.ValidateCodeValue rejects value
+//
+// If specified, it will take precedence over anything provided using Builder.Definition or Builder.Wrap.
+func (b *Builder) Code(value uint, namespace CodeNamespace) *Builder {
+	b.code = b.Generator.MustBuildCode(value, namespace)
 	return b
 }
 

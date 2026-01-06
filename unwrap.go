@@ -1,4 +1,4 @@
-// Copyright (C) 2025 neocotic
+// Copyright (C) 2026 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -53,8 +53,10 @@ func PropagatedFieldUnwrapper() Unwrapper {
 // precedence over any explicitly defined Problem fields, however, it will take precedence over any fields derived from
 // a Definition or its Type.
 func unwrapAllFields(err error) Problem {
-	if p, isProblem := As(err); isProblem && p != nil {
-		return *p
+	if p, isProblem := As(err); isProblem {
+		if c := p.Clone(); c != nil {
+			return *c
+		}
 	}
 	return Problem{}
 }

@@ -1,4 +1,4 @@
-// Copyright (C) 2025 neocotic
+// Copyright (C) 2026 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,9 @@ package problem
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"io"
+
+	"github.com/google/uuid"
 )
 
 // UUIDGenerator is a function used by a Generator to generate a Universally Unique Identifier.
@@ -50,6 +51,25 @@ func V4UUIDGenerator() UUIDGenerator {
 func V4UUIDGeneratorFromReader(reader io.Reader) UUIDGenerator {
 	return func(_ context.Context) string {
 		return handleUUID(uuid.NewRandomFromReader(reader))
+	}
+}
+
+// V7UUIDGenerator returns a UUIDGenerator that generates a (V7) UUID.
+//
+// The strength of the generated UUIDs are based on the strength of the crypto/rand package.
+//
+// Uses the randomness pool if it was enabled with uuid.EnableRandPool.
+func V7UUIDGenerator() UUIDGenerator {
+	return func(_ context.Context) string {
+		return handleUUID(uuid.NewV7())
+	}
+}
+
+// V7UUIDGeneratorFromReader returns a UUIDGenerator that generates a (V7) UUID based on bytes read from the given
+// reader.
+func V7UUIDGeneratorFromReader(reader io.Reader) UUIDGenerator {
+	return func(_ context.Context) string {
+		return handleUUID(uuid.NewV7FromReader(reader))
 	}
 }
 

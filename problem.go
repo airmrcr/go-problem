@@ -1,4 +1,4 @@
-// Copyright (C) 2025 neocotic
+// Copyright (C) 2026 neocotic
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,11 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"github.com/neocotic/go-optional"
+	"maps"
 	"strconv"
 	"strings"
+
+	"github.com/neocotic/go-optional"
 )
 
 // Extensions is a map that may contain additional information used extend the details of a Problem.
@@ -207,6 +209,17 @@ var reservedExtensions = map[string]struct{}{
 	"title":      {},
 	"type":       {},
 	"uuid":       {},
+}
+
+// Clone returns a deep copy of the Problem.
+func (p *Problem) Clone() *Problem {
+	if p == nil {
+		return nil
+	}
+
+	c := *p
+	c.Extensions = maps.Clone(p.Extensions)
+	return &c
 }
 
 // Error returns the most suitable error message for the Problem.

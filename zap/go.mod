@@ -4,7 +4,7 @@ go 1.24
 
 require (
 	github.com/neocotic/go-problem v0.3.1
-	go.uber.org/zap v1.27.0
+	go.uber.org/zap v1.27.1
 )
 
 require (
