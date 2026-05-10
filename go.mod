@@ -1,10 +1,10 @@
-module github.com/neocotic/go-problem
+module github.com/airmrcr/go-problem
 
 go 1.24
 
 require (
+	github.com/airmrcr/go-optional v0.2.0
 	github.com/google/uuid v1.6.0
-	github.com/neocotic/go-optional v0.1.2
 	github.com/stretchr/testify v1.11.1
 )
 

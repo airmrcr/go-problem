@@ -1,3 +1,3 @@
 # Authors ordered by first contribution
 
-* neocotic <https://github.com/neocotic>
+* airmrcr <https://github.com/airmrcr>

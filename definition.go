@@ -1,4 +1,4 @@
-// Copyright (C) 2026 neocotic
+// Copyright (C) 2026 airmrcr
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,7 +23,7 @@ package problem
 import (
 	"context"
 
-	"github.com/neocotic/go-optional"
+	"github.com/airmrcr/go-optional"
 )
 
 // Definition represents a reusable definition of problem occurrence that may contain default values that can be used

@@ -1,4 +1,4 @@
-// Copyright (C) 2026 neocotic
+// Copyright (C) 2026 airmrcr
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/neocotic/go-optional"
+	"github.com/airmrcr/go-optional"
 )
 
 // Extensions is a map that may contain additional information used extend the details of a Problem.

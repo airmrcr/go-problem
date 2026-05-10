@@ -1,4 +1,4 @@
-// Copyright (C) 2026 neocotic
+// Copyright (C) 2026 airmrcr
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,8 @@ import (
 	"maps"
 	"net/http"
 
-	"github.com/neocotic/go-optional"
-	"github.com/neocotic/go-problem/internal/stack"
+	"github.com/airmrcr/go-optional"
+	"github.com/airmrcr/go-problem/internal/stack"
 )
 
 // Flag provides control over the generation of specific data and its visibility on their respective fields on a

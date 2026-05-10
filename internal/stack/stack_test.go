@@ -1,4 +1,4 @@
-// Copyright (C) 2026 neocotic
+// Copyright (C) 2026 airmrcr
 // Copyright (c) 2023 Uber Technologies, Inc.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -43,7 +43,7 @@ func Test_Take(t *testing.T) {
 	assert.Contains(
 		t,
 		lines[0],
-		"github.com/neocotic/go-problem/internal/stack.Test_Take",
+		"github.com/airmrcr/go-problem/internal/stack.Test_Take",
 		"expected stacktrace to start with the test",
 	)
 }
@@ -78,7 +78,7 @@ func Test_Take_WithSkipInnerFunc(t *testing.T) {
 func Test_Take_DeepStack(t *testing.T) {
 	const (
 		N                  = 500
-		withStackDepthName = "github.com/neocotic/go-problem/internal/stack.withStackDepth"
+		withStackDepthName = "github.com/airmrcr/go-problem/internal/stack.withStackDepth"
 	)
 	withStackDepth(N, func() {
 		trace := Take(0)

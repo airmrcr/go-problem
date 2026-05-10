@@ -1,3 +1,7 @@
+## Version 0.5.0, 2026.05.10
+
+* Transfer ownership to `airmrcr`
+
 ## Version 0.4.0, 2026.01.06
 
 * **Breaking Change:** Remove `Coder` type
@@ -45,12 +49,12 @@
 
 ## Version 0.3.1, 2025.10.09
 
-* Add `LICENSE.md` file for `github.com/neocotic/go-problem/zap` module
+* Add `LICENSE.md` file for `github.com/airmrcr/go-problem/zap` module
 
 ## Version 0.3.0, 2025.10.09
 
 * **Breaking Change:** Remove built-in support for [zap](https://github.com/uber-go/zap) logging
-* Add `github.com/neocotic/go-problem/zap` module to provide support for [zap](https://github.com/uber-go/zap) logging
+* Add `github.com/airmrcr/go-problem/zap` module to provide support for [zap](https://github.com/uber-go/zap) logging
 
 ## Version 0.2.1, 2025.09.30
 
